@@ -1,0 +1,75 @@
+Table User {
+  id int pk
+  password varchar
+  username varchar
+  first_name varchar
+  last_name varchar
+  email varchar
+}
+
+Table Customer {
+  id int pk
+  phone_number int
+  address varchar
+  user_id int [ref: - "User"."id"]
+}
+
+Table Product {
+  id int pk
+  name varchar
+  price float
+  description varchar
+  quantity int
+  created_date date
+  location varchar
+  image_path varchar
+  customer_id int [ref: > "Customer"."id"]
+  category_id int [ref: > "ProductCategory"."id"]
+}
+Table ProductCategory {
+  id int pk
+  name varchar
+}
+Table ProductRating {
+  id int pk
+  rating int
+  customer_id int [ref: > "Customer"."id"]
+  product_id int [ref: > "Product"."id"]
+}
+Table Rating {
+  id int pk
+  score int
+  customer_id int [ref: > "Customer"."id"]
+  product_id int [ref: > "Product"."id"]
+}
+Table Recommendation {
+  id int pk
+  customer_id int [ref: > "Customer"."id"]
+  product_id int [ref: > "Product"."id"]
+  recommender_id int [ref: > "Customer"."id"]
+}
+Table Favorite {
+  id int pk
+  customer_id int [ref: > "Customer"."id"]
+  seller_id int [ref: > "Customer"."id"]
+}
+
+Table Order {
+  id int pk
+  created_date date
+  customer_id int [ref: > "Customer"."id"]
+  payment_type_id int [ref: > "Payment"."id"]
+}
+Table OrderProduct {
+  id int pk
+  order_id int [ref: - "Order"."id"]
+  product_id int [ref: - "Product"."id"]
+}
+Table Payment {
+  id int pk
+  merchant_name varchar
+  account_number varchar
+  expiration_date date
+  created_date date
+  customer_id int [ref: - "Customer"."id"]
+}
