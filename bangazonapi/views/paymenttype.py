@@ -1,12 +1,12 @@
 """View module for handling requests about customer payment types"""
 
 from django.http import HttpResponseServerError
+from django.contrib.auth.models import User
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from bangazonapi.models import Payment, Customer
-from django.contrib.auth.models import User
 
 
 class PaymentSerializer(serializers.HyperlinkedModelSerializer):
@@ -90,7 +90,7 @@ class Payments(ViewSet):
         payment_types = Payment.objects.all()
 
         # customer_id = self.request.query_params.get("customer", None)
-        customer_id = request.auth.user
+        customer_id = Customer.objects.get(user=request.auth.user)
 
         if customer_id is not None:
             payment_types = payment_types.filter(customer_id=customer_id)
