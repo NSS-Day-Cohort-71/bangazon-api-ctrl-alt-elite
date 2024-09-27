@@ -28,6 +28,8 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for customer orders"""
 
     lineitems = OrderLineItemSerializer(many=True)
+    payment_type = serializers.SerializerMethodField()  # Custom method for payment_type
+    total = serializers.SerializerMethodField()  # Custom method to calculate total
 
     class Meta:
         model = Order
@@ -35,7 +37,22 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             view_name='order',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'created_date', 'payment_type', 'customer', 'lineitems')
+        fields = ('id', 'url', 'created_date', 'payment_type', 'customer', 'lineitems', 'total')  # Added 'total'
+
+    def get_payment_type(self, obj):
+        """Return only the obscured number from payment_type"""
+        if obj.payment_type:
+            return f"**** **** **** {obj.payment_type.account_number[-4:]}"
+        return None
+
+    def get_total(self, obj):
+        """Calculate the total by summing up the prices of all line items"""
+        total = sum(item.product.price for item in obj.lineitems.all())
+        
+        # Return total or 0 if there are no line items
+        return total if total > 0 else 0.00
+
+
 
 
 class Orders(ViewSet):
