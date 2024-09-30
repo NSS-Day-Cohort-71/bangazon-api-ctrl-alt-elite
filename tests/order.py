@@ -119,7 +119,7 @@ class OrderTests(APITestCase):
         payment_id = json_response["id"]
 
         url = f"/orders/{order_id}"
-        data = {"payment_type": payment_id}
+        data = {"paymentTypeId": payment_id}
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token)
         response = self.client.put(url, data, format="json")
 
