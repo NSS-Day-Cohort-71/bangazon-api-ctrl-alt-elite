@@ -1,8 +1,6 @@
 import json
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .payments import PaymentTests
-from bangazonapi.models import Payment
 
 
 class OrderTests(APITestCase):
@@ -111,7 +109,7 @@ class OrderTests(APITestCase):
         url = "/payment-types"
         data = {
             "merchant": "Visa",
-            "acctNumber": 12344556778654,
+            "acctNumber": 3212344556778654,
             "expirationDate": "2027-02-01",
         }
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token)
@@ -128,6 +126,9 @@ class OrderTests(APITestCase):
         response = self.client.get(url, None, format="json")
         json_response = json.loads(response.content)
 
-        self.assertEqual(json_response["payment_type"], payment_id)
+        self.assertEqual(
+            json_response["payment_type"],
+            f"**** **** **** 8654",
+        )
 
     # TODO: New line item is not added to closed order
