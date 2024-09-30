@@ -3,7 +3,6 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from bangazonapi.models import *
 from bangazonapi.views import *
 
 # pylint: disable=invalid-name
@@ -17,6 +16,8 @@ router.register(r"orders", Orders, "order")
 router.register(r"cart", Cart, "cart")
 router.register(r"payment-types", Payments, "payment")
 router.register(r"my-profile", Profile, "profile")
+router.register(r'stores', StoreViewSet, 'store')
+
 
 
 # Wire up our API using automatic URL routing.
