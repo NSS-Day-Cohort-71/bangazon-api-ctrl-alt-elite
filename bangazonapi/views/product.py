@@ -267,7 +267,8 @@ class Products(ViewSet):
         order = self.request.query_params.get("order_by", None)
         direction = self.request.query_params.get("direction", None)
         number_sold = self.request.query_params.get("number_sold", None)
-
+        name = self.request.query_params.get("name", None)
+        
         if order is not None:
             order_filter = order
 
@@ -291,6 +292,9 @@ class Products(ViewSet):
                 return False
 
             products = filter(sold_filter, products)
+
+        if name is not None:
+            products = products.filter(name__icontains=name)
 
         serializer = ProductSerializer(
             products, many=True, context={"request": request}
