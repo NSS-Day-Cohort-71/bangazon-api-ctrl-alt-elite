@@ -3,7 +3,6 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from bangazonapi.models import *
 from bangazonapi.views import *
 
 # pylint: disable=invalid-name
