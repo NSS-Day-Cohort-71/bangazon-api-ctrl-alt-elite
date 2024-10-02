@@ -291,6 +291,10 @@ class Products(ViewSet):
         if min_price is not None:
             products = products.filter(price__gte = float(min_price))
 
+            
+        if min_price is not None:
+            products = products.filter(price__gte = float(min_price))
+
         if number_sold is not None:
             # products = products.filter(price__gte = int(number_sold))
 
@@ -301,9 +305,6 @@ class Products(ViewSet):
 
             products = filter(sold_filter, products)
             
-        if min_price is not None:
-            products = products.filter(price__gte = float(min_price))
-
         serializer = ProductSerializer(
             products, many=True, context={"request": request}
         )
