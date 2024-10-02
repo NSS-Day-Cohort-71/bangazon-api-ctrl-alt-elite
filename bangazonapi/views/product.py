@@ -267,6 +267,7 @@ class Products(ViewSet):
         order = self.request.query_params.get("order_by", None)
         direction = self.request.query_params.get("direction", None)
         number_sold = self.request.query_params.get("number_sold", None)
+        min_price = self.request.query_params.get("min_price", None)
         name = self.request.query_params.get("name", None)
         
         if order is not None:
@@ -285,6 +286,7 @@ class Products(ViewSet):
             products = products.order_by("-created_date")[: int(quantity)]
 
         if number_sold is not None:
+            # products = products.filter(price__gte = int(number_sold))
 
             def sold_filter(product):
                 if product.number_sold >= int(number_sold):
@@ -292,6 +294,9 @@ class Products(ViewSet):
                 return False
 
             products = filter(sold_filter, products)
+
+        if min_price is not None:
+            products = products.filter(price__gte = float(min_price))
 
         if name is not None:
             products = products.filter(name__icontains=name)
