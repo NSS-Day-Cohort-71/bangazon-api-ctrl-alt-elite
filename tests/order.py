@@ -134,8 +134,8 @@ class OrderTests(APITestCase):
     # TODO: New line item is not added to closed order
     def test_add_to_cart_not_closed_order(self):
         # Create order by adding product to cart
-        url = "/cart"
-        data = {"product_id": 1}
+        url = "/profile/cart"
+        data = {"productId": 1}
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token)
         response = self.client.post(url, data, format="json")
 
@@ -166,8 +166,8 @@ class OrderTests(APITestCase):
         response = self.client.put(url, data, format="json")
 
         # then add another product to cart
-        url = "/cart"
-        data = {"product_id": 1}
+        url = "/profile/cart"
+        data = {"productId": 1}
         self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token)
         response = self.client.post(url, data, format="json")
         # then get new order and get it's id
