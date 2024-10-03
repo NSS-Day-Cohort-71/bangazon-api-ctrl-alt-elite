@@ -47,3 +47,32 @@ class PaymentTests(APITestCase):
         # self.assertEqual(json_response["create_date"], str(datetime.date.today()))
 
     # TODO: Delete payment type
+
+    def test_delete_payment_type(self):
+
+        #Create
+        url = "/payment-types"
+        data = {
+        "merchant": "Visa",
+        "acctNumber": 1234567890,
+        "expirationDate": "2027-02-01",
+        }
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + self.token)
+        response = self.client.post(url, data, format="json")
+        json_response = json.loads(response.content)
+        payment_id = json_response["id"]
+
+        #Verify create
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        #Delete
+        url = f"/payment-types/{payment_id}"
+        response = self.client.delete(url)
+    
+
+        #Verify delete
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        #Retrieve delete
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
