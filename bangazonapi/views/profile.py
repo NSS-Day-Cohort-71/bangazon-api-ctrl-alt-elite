@@ -8,12 +8,12 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
-from bangazonapi.models import Order, Customer, Product
+from bangazonapi.models import Order, Customer, Product, Store
 from bangazonapi.models import OrderProduct, Favorite
 from bangazonapi.models import Recommendation
 from .product import ProductSerializer
 from .order import OrderSerializer
-
+from .store import StoreSerializer
 
 class Profile(ViewSet):
     """Request handlers for user profile info in the Bangazon Platform"""
@@ -86,6 +86,9 @@ class Profile(ViewSet):
             current_user = Customer.objects.get(user=request.auth.user)
             current_user.recommends = Recommendation.objects.filter(
                 recommender=current_user
+            )
+            current_user.store = Store.objects.get(
+                seller_id = current_user
             )
 
             serializer = ProfileSerializer(
@@ -397,6 +400,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     user = UserSerializer(many=False)
     recommends = RecommenderSerializer(many=True)
+    store = StoreSerializer(many=False, read_only=True)
 
     class Meta:
         model = Customer
@@ -408,6 +412,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "address",
             "payment_types",
             "recommends",
+            "store",
         )
         depth = 1
 

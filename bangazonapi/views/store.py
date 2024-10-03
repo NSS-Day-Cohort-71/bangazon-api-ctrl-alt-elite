@@ -11,7 +11,7 @@ class StoreSellerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('first_name', 'last_name')
+        fields = ('first_name', 'last_name', 'id')
 
 class StoreProductSerializer(serializers.ModelSerializer):
     """JSON serializer for products in a store"""
@@ -28,7 +28,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ('id', 'name', 'description', 'seller', 'products')
+        fields = ('id', 'name', 'description', 'seller', 'products', 'seller_id')
 
 class StoreViewSet(ViewSet):
     """View for handling requests about stores"""
