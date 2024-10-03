@@ -179,3 +179,5 @@ class OrderTests(APITestCase):
 
         # then assert that the second order's id does not equal the closed order's id
         self.assertNotEqual(order_id_to_close, order_id)
+
+    
