@@ -15,3 +15,11 @@ class Customer(models.Model):
     @recommends.setter
     def recommends(self, value):
         self.__recommends = value
+
+    @property
+    def store(self):
+        return self.__store
+    
+    @store.setter
+    def store(self, value):
+        self.__store = value

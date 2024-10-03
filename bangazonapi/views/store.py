@@ -11,7 +11,7 @@ class StoreSellerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('first_name', 'last_name')
+        fields = ('first_name', 'last_name', 'id')
 
 class StoreProductSerializer(serializers.ModelSerializer):
     """JSON serializer for products in a store"""
@@ -28,7 +28,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ('id', 'name', 'description', 'seller', 'products')
+        fields = ('id', 'name', 'description', 'seller', 'products', 'seller_id')
 
 class StoreViewSet(ViewSet):
     """View for handling requests about stores"""
@@ -53,3 +53,12 @@ class StoreViewSet(ViewSet):
         print("Store Created with ID:", new_store.id)  # Debugging log for backend
         print("Serialized data:", serializer.data)  # Add this log for debugging
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def retrieve(self, request, pk=None):
+        """GET a single store by ID"""
+        try:
+            store = Store.objects.get(pk=pk)
+            serializer = StoreSerializer(store)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Store.DoesNotExist:
+            return Response({'message': 'Store not found.'}, status=status.HTTP_404_NOT_FOUND)
