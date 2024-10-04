@@ -5,6 +5,7 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from bangazonapi.views import *
 
+
 # pylint: disable=invalid-name
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r"products", Products, "product")
@@ -27,4 +28,5 @@ urlpatterns = [
     path("login", login_user),
     path("api-token-auth", obtain_auth_token),
     path("api-auth", include("rest_framework.urls", namespace="rest_framework")),
+    path("reports/", include("bangazonapi.templates.template_urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
