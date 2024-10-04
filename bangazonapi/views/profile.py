@@ -15,6 +15,7 @@ from .product import ProductSerializer
 from .order import OrderSerializer
 from .store import StoreSerializer
 
+
 class Profile(ViewSet):
     """Request handlers for user profile info in the Bangazon Platform"""
 
@@ -87,9 +88,10 @@ class Profile(ViewSet):
             current_user.recommends = Recommendation.objects.filter(
                 recommender=current_user
             )
-            current_user.store = Store.objects.get(
-                seller_id = current_user
-            )
+            try:
+                current_user.store = Store.objects.get(seller_id=current_user)
+            except:
+                current_user.store = None
 
             serializer = ProfileSerializer(
                 current_user, many=False, context={"request": request}
