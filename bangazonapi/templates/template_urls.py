@@ -1,6 +1,6 @@
 from django.urls import path
-from .reports.orders import order
+from .views import order
 
 urlpatterns = [
-    path("orders", order, name="unpaid_orders_report"),
+    path("orders", order.unpaid_orders_report, name="unpaid_orders_report"),
 ]
