@@ -43,7 +43,7 @@ class LineItems(ViewSet):
 
         @apiHeader {String} Authorization Auth token
         @apiHeaderExample {String} Authorization
-            Token 9ba45f09651c5b0c404f37a2d2572c026c146611
+            Token 9ba45f09651c5b0c404f37a2d2572c026c146611 
 
         @apiParam {id} id Product Id to remove from cart
         @apiSuccessExample {json} Success
