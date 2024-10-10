@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block content %}
+
+<h1>Expensive Products Report</h1>
+{% if products %}
+<table>
+  <thead>
+    <tr>
+      <th>Product ID</th>
+      <th>Product Name</th>
+      <th>Product Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.product_id }}</td>
+      <td>{{ product.name }}</td>
+      <td>${{ product.price }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h1>No Products Over $1000</h1>
+{% endif %} {% endblock %}
