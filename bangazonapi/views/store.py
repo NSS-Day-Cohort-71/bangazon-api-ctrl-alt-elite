@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from bangazonapi.models import Store, Product, Customer
+from bangazonapi.models import Store, Product, Customer, Favorite
 
 
 class StoreSellerSerializer(serializers.ModelSerializer):
@@ -54,16 +54,20 @@ class StoreViewSet(ViewSet):
         )
 
         serializer = StoreSerializer(new_store)
-        print("Store Created with ID:", new_store.id)  # Debugging log for backend
-        print("Serialized data:", serializer.data)  # Add this log for debugging
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         """GET a single store by ID"""
         try:
+            current_customer = Customer.objects.get(user=request.auth.user)
             store = Store.objects.get(pk=pk)
             serializer = StoreSerializer(store)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            is_favorite = Favorite.objects.filter(
+                customer=current_customer, seller=store.seller
+            ).exists()
+            store_data = serializer.data
+            store_data["is_favorite"] = is_favorite
+            return Response(store_data, status=status.HTTP_200_OK)
         except Store.DoesNotExist:
             return Response(
                 {"message": "Store not found."}, status=status.HTTP_404_NOT_FOUND
