@@ -191,19 +191,23 @@ class Profile(ViewSet):
             try:
                 open_order = Order.objects.get(customer=current_user, payment_type=None)
                 line_items = OrderProduct.objects.filter(order=open_order)
-                
-                
-                serialized_line_items = LineItemSerializer(line_items, many=True, context={"request": request})
+
+                serialized_line_items = LineItemSerializer(
+                    line_items, many=True, context={"request": request}
+                )
 
                 cart = {}
-                cart["order"] = OrderSerializer(open_order, many=False, context={"request": request}).data
+                cart["order"] = OrderSerializer(
+                    open_order, many=False, context={"request": request}
+                ).data
 
-                
-                cart["order"]["lineitems"] = serialized_line_items.data  
+                cart["order"]["lineitems"] = serialized_line_items.data
                 cart["order"]["size"] = len(serialized_line_items.data)
 
             except Order.DoesNotExist as ex:
-                return Response({"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+                return Response(
+                    {"message": ex.args[0]}, status=status.HTTP_404_NOT_FOUND
+                )
 
             return Response(cart["order"])
 
@@ -271,7 +275,7 @@ class Profile(ViewSet):
         return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @action(methods=["get", "post", "delete"], detail=False)
-    def favoritesellers(self, request):
+    def favoritesellers(self, request, pk=None):
         """
         @api {GET} /profile/favoritesellers GET favorite sellers
         @apiName GetFavoriteSellers
@@ -339,9 +343,12 @@ class Profile(ViewSet):
             return Response(status=status.HTTP_201_CREATED)
 
         if request.method == "DELETE":
+            customer = Customer.objects.get(user=request.auth.user)
             store = Store.objects.get(pk=request.data["store_id"])
             seller = Customer.objects.get(pk=store.seller_id)
-            favorite_to_delete = Favorite.objects.get(seller=seller)
+            favorite_to_delete = Favorite.objects.get(
+                seller_id=seller, customer_id=customer.id
+            )
             favorite_to_delete.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
