@@ -54,8 +54,6 @@ class StoreViewSet(ViewSet):
         )
 
         serializer = StoreSerializer(new_store)
-        print("Store Created with ID:", new_store.id)  # Debugging log for backend
-        print("Serialized data:", serializer.data)  # Add this log for debugging
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
