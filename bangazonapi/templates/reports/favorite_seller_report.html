@@ -1,0 +1,15 @@
+<!-- extend base html and establish block to be inserted into body -->
+{% extends 'base.html' %} 
+
+{% block content %}
+    {% if report_data %}
+        <h1>{{ report_data.customer.first_name }} {{ report_data.customer.last_name}}'s Favorites</h1>
+        <ul>
+            {% for seller in report_data.favorite_sellers %}
+            <li>{{ seller.first_name }} {{ seller.last_name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h1>User matching query does not exist</h1>
+    {% endif %}
+{% endblock %}
